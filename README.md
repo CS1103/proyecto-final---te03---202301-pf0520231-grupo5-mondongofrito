@@ -2,6 +2,9 @@
 proyecto-final---te03---202301-pf0520231-grupo5-mondongofrito created by GitHub Classroom
 # Proyecto: Implementación del algoritmo Backpropagation para el reconocimiento de dígitos a mano
 
+![image](https://github.com/CS1103/proyecto-final---te03---202301-pf0520231-grupo5-mondongofrito/assets/108534678/5d50c32b-4052-4bff-a024-01f764b46f5f)
+
+
 En este proyecto, se implementará el algoritmo Backpropagation en C++ para reconocer dígitos manuscritos utilizando el conjunto de datos MNIST. El objetivo es diseñar e implementar una arquitectura de red neuronal, implementar los pases hacia adelante y hacia atrás, y optimizar la red utilizando el descenso de gradiente.
 
 ## Conjunto de datos MNIST
