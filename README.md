@@ -23,14 +23,4 @@ El algoritmo Backpropagation consta de dos pasos principales: el pase hacia adel
 
 El descenso de gradiente es un algoritmo de optimización utilizado para ajustar los pesos y sesgos de la red neuronal con el fin de minimizar la función de pérdida. Se actualizan los pesos y sesgos en dirección opuesta al gradiente de la función de pérdida con respecto a ellos, multiplicados por una tasa de aprendizaje. Esto se repite en múltiples iteraciones (épocas) hasta que se logra convergencia y se obtiene una red neuronal entrenada.
 
-## Implementación del proyecto
-
-El proyecto se implementará en C++ y se proporciona una estructura básica de archivos para organizar el código:
-
-- `neuron.h` y `neuron.cpp`: Contienen la definición y la implementación de la clase `Neuron`, que representa una neurona de la red neuronal.
-- `network.h` y `network.cpp`: Contienen la definición y la implementación de la clase `Network`, que representa la red neuronal en su conjunto y contiene la lógica para el pase hacia adelante, el pase hacia atrás y la actualización de los pesos y sesgos.
-- `main.cpp`: Contiene el código principal del proyecto, donde se crea la red neuronal, se realizan los pases hacia adelante y hacia atrás utilizando el conjunto de datos MNIST, y se evalúa el rendimiento de la red neuronal.
-
-Se recomienda seguir las instrucciones en los comentarios del código para implementar y personalizar la red neuronal según tus necesidades y requisitos específicos.
-
 ¡Diviértete implementando el algoritmo Backpropagation para el reconocimiento de dígitos a mano!
