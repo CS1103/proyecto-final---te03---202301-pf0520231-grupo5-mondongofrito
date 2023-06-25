@@ -4,12 +4,11 @@ project(MondongoFrito VERSION 0.1.0 LANGUAGES C CXX)
 include(CTest)
 enable_testing()
 
-
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(C:/tools/opencv/build/include)
 
-add_executable(MondongoFrito main.cpp)
+add_executable(MondongoFrito main.cpp imageloading.h)
 
 target_link_libraries(MondongoFrito ${OpenCV_LIBS})
 
