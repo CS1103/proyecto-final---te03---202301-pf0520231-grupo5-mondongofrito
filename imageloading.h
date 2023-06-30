@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <vector>
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgcodecs.hpp>
 
@@ -17,19 +18,51 @@ uint32_t swapEndian(uint32_t input) {
     output |= ((input & 0xFF0000) >> 8);       // 4 3 2 4
     output |= ((input & 0xFF000000) >> 24);    // 4 3 2 1
     return output;
-    
 } // Invierte un unsigned int de 32 bytes de big endian a little endian (y viceversa)
   // El mnist guardaba los archivos con un orden de bytes distinto al de procesadores intel, por eso que explotaba todo
   // Con eso nos aseguramos de que podamos leerlo al invertir el orden de los bytes
   // O al menos eso entendí :')
 
-void loadMnist(const string &imagePath, const string &labelPath) {
-    ifstream images(imagePath, std::ios::in | std::ios::binary);
-    ifstream labels(labelPath, std::ios::in | std::ios::binary);
+void loadMnist(string imagePath, string labelPath, vector<pair<Mat, int>> &vec){
 
-    uint32_t magicNum, itemNum, labelNum, rows, cols;
-} // aaaaaaaaaaaaaa
-  // Probablemente debería devolver un vector con las imágenes
+    ifstream images(imagePath, ios::in | ios::binary);
+    ifstream labels(labelPath, ios::in | ios::binary);
+
+    uint32_t magicNumber, itemNumber, num_labels, rows, cols;
+
+    images.read(reinterpret_cast<char*>(&magicNumber), 4);
+    magicNumber = swapEndian(magicNumber);
+
+    labels.read(reinterpret_cast<char*>(&magicNumber), 4);
+    magicNumber = swapEndian(magicNumber);
+
+    images.read(reinterpret_cast<char*>(&itemNumber), 4);
+    itemNumber = swapEndian(itemNumber);
+
+    labels.read(reinterpret_cast<char*>(&num_labels), 4);
+    num_labels = swapEndian(num_labels);
+
+    images.read(reinterpret_cast<char*>(&rows), 4);
+    rows = swapEndian(rows);
+
+    images.read(reinterpret_cast<char*>(&cols), 4);
+    cols = swapEndian(cols);
+
+    // El reinterpret cast convierte la direccion de memoria de cada parametro en un puntero, por eso el char*
+
+    char* currentImageValues = new char[rows * cols]; // Array temporal a usar para guardar la imagen actual dentro del bucle
+    char label; // El numero que representa la imagen
+
+    for (int imageIndex = 0; imageIndex < itemNumber; ++imageIndex) {
+        images.read(currentImageValues, rows * cols);
+        labels.read(&label, 1);
+        Mat currentImage(rows, cols, CV_8UC1, currentImageValues); // Creamos una matriz a partir del array
+        currentImage.convertTo(currentImage, CV_64F, 1.0 / 255.0); // Convertimos el valor de cada pixel al formato que usamos
+        resize(currentImage, currentImage, Size(28, 28)); // Cambiamos las dimensiones de la imagen
+        vec.push_back(make_pair(currentImage, int(label)));
+    }
+    delete[] currentImageValues;
+} // Carga cada imagen del archivo a un vector de pairs<Mat, int>, donde Mat es la imagen y el int es el label
 
 void normalizeImage(Mat &image) {
     image.convertTo(image, CV_64F, 1.0 / 255.0);
@@ -68,5 +101,4 @@ void displayImageValues(const Mat &image, bool round = false) {
 // https://stackoverflow.com/questions/8286668/how-to-read-mnist-data-in-c
 
 
-
-// No estoy mentalmente preparado para los finales
+// ayuda aaaaaaaaaaa
