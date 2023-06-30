@@ -6,10 +6,30 @@
 using namespace std;
 using namespace cv;
 
-/*
-void loadMnist(const string &path) {
-    ifstream idxFile (path,ios::binary);
-}*/ // Deberia convertir los archivos idx de imagenes y labels a matrices y un numeros dependiendo del label
+uint32_t swapEndian(uint32_t input) {
+    // Sabemos que un byte son 8 bits, asi que podemos ver el unsigned de 32 como 4 arrays de 8 elementos cada uno
+    // Para invertir el orden y que nuestro procesador pueda leerlo, debemos intercambiar el orden de los bytes
+    // Digamos que iniciamos con un array 1 2 3 4
+
+    uint32_t output = 0;                       // 1 2 3 4
+    output |= ((input & 0xFF) << 24);          // 4 2 3 4
+    output |= ((input & 0xFF00) << 8);         // 4 3 3 4
+    output |= ((input & 0xFF0000) >> 8);       // 4 3 2 4
+    output |= ((input & 0xFF000000) >> 24);    // 4 3 2 1
+    return output;
+    
+} // Invierte un unsigned int de 32 bytes de big endian a little endian (y viceversa)
+  // El mnist guardaba los archivos con un orden de bytes distinto al de procesadores intel, por eso que explotaba todo
+  // Con eso nos aseguramos de que podamos leerlo al invertir el orden de los bytes
+  // O al menos eso entendí :')
+
+void loadMnist(const string &imagePath, const string &labelPath) {
+    ifstream images(imagePath, std::ios::in | std::ios::binary);
+    ifstream labels(labelPath, std::ios::in | std::ios::binary);
+
+    uint32_t magicNum, itemNum, labelNum, rows, cols;
+} // aaaaaaaaaaaaaa
+  // Probablemente debería devolver un vector con las imágenes
 
 void normalizeImage(Mat &image) {
     image.convertTo(image, CV_64F, 1.0 / 255.0);
@@ -41,12 +61,12 @@ void displayImageValues(const Mat &image, bool round = false) {
     }
     
 } // Muestra el valor de cada pixel como int o double, el input debe ser CV_64F (grises)
-/*
-void train(int loopsPerImage, std::vector<double> biases) {
-    for (int i = 0; i < loopsPerImage; ++i) {
-
-    }
-}*/ // Idealmente deberia loopear por cada imagen loopsPerImage veces, ajustando los weights y biases del modelo
 
 // http://neuralnetworksanddeeplearning.com/chap1.html
 // https://docs.opencv.org/4.7.0/d1/dfb/intro.html
+// https://stackoverflow.com/questions/1041554/bitwise-operators-and-endianness
+// https://stackoverflow.com/questions/8286668/how-to-read-mnist-data-in-c
+
+
+
+// No estoy mentalmente preparado para los finales
