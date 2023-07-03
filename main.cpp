@@ -12,6 +12,8 @@ int main() {
     loadMnist(imagePath, labelPath, ref(images));
     for (const auto &e : images) {
         cout << "Current image label: " << e.second << endl;
+        cout << "Current image values: " << endl;
+        displayImageChars(e.first);
         showImage(e.first);
     }
     return 0;

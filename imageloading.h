@@ -7,7 +7,7 @@
 using namespace std;
 using namespace cv;
 
-uint32_t swapEndian(uint32_t input) {
+constexpr uint32_t swapEndian(uint32_t input) {
     // Sabemos que un byte son 8 bits, asi que podemos ver el unsigned de 32 como 4 arrays de 8 elementos cada uno
     // Para invertir el orden y que nuestro procesador pueda leerlo, debemos intercambiar el orden de los bytes
     // Digamos que iniciamos con un array 1 2 3 4
@@ -53,7 +53,7 @@ void loadMnist(string imagePath, string labelPath, vector<pair<Mat, int>> &vec){
     char* currentImageValues = new char[rows * cols]; // Array temporal a usar para guardar la imagen actual dentro del bucle
     char label; // El numero que representa la imagen
 
-    for (int imageIndex = 0; imageIndex < itemNumber; ++imageIndex) {
+    for (uint32_t imageIndex = 0; imageIndex < itemNumber; ++imageIndex) {
         images.read(currentImageValues, rows * cols);
         labels.read(&label, 1);
         Mat currentImage(rows, cols, CV_8UC1, currentImageValues); // Creamos una matriz a partir del array
@@ -94,6 +94,38 @@ void displayImageValues(const Mat &image, bool round = false) {
     }
     
 } // Muestra el valor de cada pixel como int o double, el input debe ser CV_64F (grises)
+
+void displayImageChars(const Mat &image) {
+    if (image.type() == CV_64F) {
+        for (int i = 0; i < image.rows; ++i) {
+            for (int j = 0; j < image.cols; ++j) {
+                auto val = image.at<double>(i, j);
+                if (val == 0) {
+                    cout << "  ";
+                }
+                else if (val > 0  && val < 0.2) {
+                    cout << ". ";
+                }
+                else if (val >= 0.2 && val < 0.4) {
+                    cout << ", ";
+                }
+                else if (val >= 0.4 && val < 0.6) {
+                    cout << "+ ";
+                }
+                else if (val >= 0.6 && val < 0.8) {
+                    cout << "* ";
+                }
+                else if (val > 0.8) {
+                    cout << "# ";
+                }
+            }
+            cout << endl;
+        }
+    }
+    else {
+        cout << "Image is not CV_64F" << endl;
+    }
+}
 
 // http://neuralnetworksanddeeplearning.com/chap1.html
 // https://docs.opencv.org/4.7.0/d1/dfb/intro.html
