@@ -12,7 +12,7 @@
 # clean:
 # 	rm -f $(TARGET)
 
-#! Para compilacion en windows
+#! Para compilacion en windows 
 # @echo off
 # set CC=g++
 # set CFLAGS=-Wall
@@ -26,3 +26,4 @@
 
 # clean:
 # 	del %TARGET%
+
