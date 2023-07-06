@@ -90,5 +90,3 @@ void NN::HeRandomWeights(){
         weights[i] = dis(gen);
 }
 
-// evaluators
-
