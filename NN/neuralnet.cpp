@@ -7,17 +7,19 @@
 
 using namespace std;
 
+// NN start it UPPPPP
 NN::NN(const vector<unsigned> &layers)
 {
 	Initialize(layers);
 }
 
+// NN en un archivo
 NN::NN(const char *filename)
 {
 	Load(filename);
 }
 
-// starters
+// Start nn 2 w layers
 void NN::Initialize(const vector<unsigned> &layers){
     this->layers = layers;
     nneuron = accumulate(layers.begin(), layers.end(), 0u);
@@ -50,6 +52,7 @@ void NN::Initialize(const vector<unsigned> &layers){
     }
 }
 
+// Función que carga el loudout y los weights de la NN desde un archivo
 void NN::Load(const char *filename){
     ifstream in{filename};
     in >> nlayer;
@@ -61,6 +64,7 @@ void NN::Load(const char *filename){
         in >> weights[i];
 }
 
+// Guarda el loudout y los weights de la NN en un archivo
 void NN::Save(const char *filename) const{
     ofstream out{filename};
     out << nlayer << endl;
@@ -72,7 +76,7 @@ void NN::Save(const char *filename) const{
     out << endl;
 }
 
-// randomizers
+// randomizers de pesos par la NN uno con un rango y otro con la formula de He
 
 void NN::RandomWeights(float mn, float mx){
     random_device rd;
