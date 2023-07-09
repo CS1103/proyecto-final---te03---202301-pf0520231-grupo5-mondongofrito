@@ -10,8 +10,9 @@
 using namespace std;
 
 class NN{
-    friend class Trainer;
+    friend class Trainer; // clase trainer puede acceder a los miembros privados de NN
 private:
+    // Variables
     struct{
         vector<float> linear_vals, vals, grad;
         vector<float*> forward_weights;
@@ -21,6 +22,7 @@ private:
     vector<unsigned> layers;
     unsigned nneuron, nweight, nlayer;
 public:
+    // Constructores y funciones
     NN() = default;
     NN(const vector<unsigned> &layers);
     NN(const char *filename);
@@ -28,12 +30,14 @@ public:
     void Load(const char *filename);
     
     NN &operator = (const NN &x){
+        // Asignar los valores de la instancia a otra instancia
         nlayer = x.nlayer;
         nneuron = x.nneuron;
         nweight = x.nweight;
         neurons = x.neurons;
         weights = x.weights;
         layers = x.layers;
+        // forward_weights y forward_vals ajustarlo para que apunten a los nuevos vectores
         for(auto &i : neurons.forward_weights)
             i = i - x.weights.data() + weights.data();
         for(auto &i : neurons.forward_vals){
@@ -47,34 +51,42 @@ public:
     void HeRandomWeights();
 
     inline void Evaluar(const vector<float> &input){
+        // Copiar los valores de entrada al vector de valores de las neuronas
         assert(input.size() == layers.front());
         copy(input.data(), input.data() + layers.front(), neurons.vals.data());
         for (unsigned i = layers.front(); i< nneuron; ++i){
             float &linear_val = neurons.linear_vals[i], *w = neurons.forward_weights[i];
             linear_val = 0;
+             // Suma de los valores de las neuronas hacia adelante
             for (float *v = neurons.forward_vals[i].first, *end = neurons.forward_vals[i].second; v != end; ++v, ++w)
                 linear_val += *v * *w;
+            // Sumar sesgo
             linear_val += *w;
+            // Llamar a sigmoid el grande
             neurons.vals[i] = sigmoid(linear_val);
         }
     };
     
-    // uwU QUIERO MORIR
+
     inline void Backpropagation(const vector<float> &exp, vector<float> *suma_weight_grad){
         assert(exp.size() == layers.back());
         assert(suma_weight_grad -> size() == nweight);
 
+        // Reiniciar los gradientes de las neuronas menos de la ultima
         fill(neurons.grad.begin(), neurons.grad.begin()+ nneuron - layers.back(), 0.0f);
 
+        // Cuantos gradientes tiene la ultima capa
         for(unsigned i = nneuron - layers.back(), j = 0; i < nneuron; ++i, ++j){
             neurons.grad[i] = 2.0*(neurons.vals[i] - exp[j]);
-        
+        // Retropropagacion del error para las capas anteriores
         for(unsigned i = nneuron-1; i>= layers.front(); --i){
+            // Calcular 
             float delta = neurons.grad[i] * sigmoid_prime(neurons.linear_vals[i]);
             float *w = neurons.forward_weights[i];
             float *e = neurons.forward_vals[i].first;
             int wi = w - weights.data();
             int ei= e - neurons.vals.data();
+            // Actualizar los gradientes de las neuronas y sumar los gradientes de los pesos
             for(float *end = neurons.forward_vals[i].second; e != end; 
 					++e, ++ei, ++w, ++wi)
 			{
@@ -86,6 +98,7 @@ public:
         }
     }
     inline const float *result() const{
+        // Devolver un puntero al vector de valores de las neuronas correspondientes a la salida de la red neuronal
         return neurons.vals.data() + nneuron - layers.back();
     }     
 
