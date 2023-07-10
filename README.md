@@ -1,15 +1,13 @@
-# proyecto-final---te03---202301-pf0520231-grupo5-mondongofrito
-proyecto-final---te03---202301-pf0520231-grupo5-mondongofrito created by GitHub Classroom
-# Proyecto: Implementación del algoritmo Backpropagation para el reconocimiento de dígitos a mano
+# MondongoFrito - Digit Recognition
 
-![image](https://github.com/CS1103/proyecto-final---te03---202301-pf0520231-grupo5-mondongofrito/assets/108534678/5d50c32b-4052-4bff-a024-01f764b46f5f)
+![Logo](/page/logo.png)
 
 
-En este proyecto, se implementará el algoritmo Backpropagation en C++ para reconocer dígitos manuscritos utilizando el conjunto de datos MNIST. El objetivo es diseñar e implementar una arquitectura de red neuronal, implementar los pases hacia adelante y hacia atrás, y optimizar la red utilizando el descenso de gradiente.
+En este proyecto, se implementará el algoritmo Backpropagation en C++ para reconocer dígitos manuscritos utilizando el conjunto de datos MNIST. El objetivo es diseñar e implementar una arquitectura de red neuronal, implementar los forward y backward passes, y optimizar la red utilizando el descenso de gradiente.
 
 ## Conjunto de datos MNIST
 
-El conjunto de datos MNIST es una colección ampliamente utilizada de imágenes de dígitos escritos a mano. Consiste en 60,000 imágenes de entrenamiento y 10,000 imágenes de prueba, cada una de 28x28 píxeles en escala de grises. Cada imagen está etiquetada con el dígito correspondiente, que varía de 0 a 9.
+El conjunto de datos MNIST es una amplia colección de imágenes de dígitos escritos a mano. Consiste de 60,000 imágenes de entrenamiento y 10,000 imágenes de prueba, cada una de 28x28 píxeles en escala de grises. Cada imagen está etiquetada con el dígito correspondiente, que varía de 0 a 9.
 
 ## Arquitectura de red neuronal
 
@@ -21,6 +19,8 @@ El algoritmo Backpropagation consta de dos pasos principales: el pase hacia adel
 
 ## Optimización de la red utilizando descenso de gradiente
 
-El descenso de gradiente es un algoritmo de optimización utilizado para ajustar los pesos y sesgos de la red neuronal con el fin de minimizar la función de pérdida. Se actualizan los pesos y sesgos en dirección opuesta al gradiente de la función de pérdida con respecto a ellos, multiplicados por una tasa de aprendizaje. Esto se repite en múltiples iteraciones (épocas) hasta que se logra convergencia y se obtiene una red neuronal entrenada.
+El descenso de gradiente es un algoritmo de optimización utilizado para ajustar los pesos y sesgos de la red neuronal con el fin de minimizar la función de pérdida. Se actualizan los pesos y sesgos en dirección opuesta al gradiente de la función de pérdida con respecto a ellos, multiplicados por una tasa de aprendizaje. Esto se repite en múltiples iteraciones hasta que se logra convergencia y se obtiene una red neuronal entrenada.
 
-¡Diviértete implementando el algoritmo Backpropagation para el reconocimiento de dígitos a mano!
+## Requerimientos
+
+Para compilar o ejecutar el programa, se requiere la versión 4.7.0 de OpenCV o una más reciente. Se está considerando incluir una instalación local con el ejecutable, aunque aún no se decide. Se recomienda, aunque no es completamente necesario, utilizar los compiladores especificados la [guía de compilación](/COMPILINGSETUP.md).
