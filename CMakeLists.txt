@@ -8,7 +8,7 @@ find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(C:/tools/opencv/build/include)
 
-add_executable(MondongoFrito main.cpp imageloading.h)
+add_executable(MondongoFrito main.cpp imageloading.h imageloading.cpp NN/neuralnet.h NN/neuralnet.cpp NN/init.h)
 
 target_link_libraries(MondongoFrito ${OpenCV_LIBS})
 

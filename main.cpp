@@ -1,20 +1,20 @@
-#include "imageloading.h"
 #include <opencv2/core/utils/logger.hpp>
 
-using namespace cv;
+#include "imageloading.h"
+
 using namespace std;
 
 int main() {
     cv::utils::logging::setLogLevel(cv::utils::logging::LogLevel::LOG_LEVEL_SILENT);
     string imagePath = "C:/Users/Danee/VSCodeProjects/MondongoFrito/mnist/t10k-images.idx3-ubyte";
     string labelPath = "C:/Users/Danee/VSCodeProjects/MondongoFrito/mnist/t10k-labels.idx1-ubyte";
-    vector<pair<Mat, int>> images;
-    loadMnist(imagePath, labelPath, ref(images));
+    vector<pair<cv::Mat, int>> images;
+    mondongo::loadMnist(imagePath, labelPath, ref(images));
     for (const auto &e : images) {
         cout << "Current image label: " << e.second << endl;
         cout << "Current image values: " << endl;
-        displayImageChars(e.first);
-        showImage(e.first);
+        mondongo::displayImageChars(e.first);
+        mondongo::showImage(e.first);
     }
     return 0;
 }
