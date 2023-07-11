@@ -144,3 +144,13 @@ void mondongo::displayImageChars(const cv::Mat &image) {
         cout << "Image is not CV_64F" << endl;
     }
 }
+
+/// @brief cv::Mat::reshape wrapper, turns a matrix into an array.
+/// @param img cv::Mat to be flattened.
+void mondongo::flatten(const cv::Mat &img) {
+    cv::Mat cop = img;
+    cop = cop.reshape(1, 1);
+    for (auto i = 0; i < cop.cols; ++i) {
+        cout << cop.at<double>(i) << endl;
+    }
+}

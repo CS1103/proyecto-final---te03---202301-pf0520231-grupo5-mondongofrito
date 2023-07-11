@@ -16,6 +16,7 @@ namespace mondongo {
     void showImage(const cv::Mat &image, const string &windowName = "Press any key to close");
     void displayImageValues(const cv::Mat &image, bool round = false);
     void displayImageChars(const cv::Mat &image);
+    void flatten(const cv::Mat &img);
 }
 
 // http://neuralnetworksanddeeplearning.com/chap1.html
