@@ -1,29 +1,42 @@
-#! Para compilacion en linux
-# CC = g++
-# CFLAGS = -Wall
-# OPENCV = `pkg-config opencv4 --cflags --libs`
-# TARGET = main
+# !For linux, tested in Debian based distros
+# CC=g++
+# CFLAGS=-I. -std=c++14
+# LIBS=-lopencv_core -lopencv_imgcodecs -lopencv_imgproc -lopencv_highgui
 
-# all: $(TARGET)
+# all: main
 
-# $(TARGET): $(TARGET).cpp
-# 	$(CC) $(CFLAGS) -o $(TARGET) $(TARGET).cpp $(OPENCV)
+# main: main.o imageloading.o
+# 	$(CC) -o main main.o imageloading.o $(CFLAGS) $(LIBS)
 
+# main.o: main.cpp imageloading.h
+# 	$(CC) -c main.cpp $(CFLAGS)
+
+# imageloading.o: imageloading.cpp imageloading.h
+# 	$(CC) -c imageloading.cpp $(CFLAGS)
+
+# .PHONY: clean
 # clean:
-# 	rm -f $(TARGET)
+# 	rm -f *.o main
 
-#! Para compilacion en windows 
-# @echo off
-# set CC=g++
-# set CFLAGS=-Wall
-# set OPENCV=-lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_imgcodecs
-# set TARGET=main.exe
+# !For Windows
 
-# all: %TARGET%
+# CC=g++
+# CFLAGS=-I. -std=c++14 
+# OPENCV_PATH = C:/opencv #!change this to your opencv path
+# LIBS=-L$(OPENCV_PATH)/build/x64/vc15/lib -lopencv_core430 -lopencv_imgcodecs430 -lopencv_imgproc430 -lopencv_highgui430
 
-# %TARGET%: %TARGET%.cpp
-# 	%CC% %CFLAGS% -o %TARGET% %TARGET%.cpp %OPENCV%
+# # Default target
+# all: main
 
+# main: main.o imageloading.o
+# 	$(CC) -o main main.o imageloading.o $(CFLAGS) $(LIBS)
+
+# main.o: main.cpp imageloading.h
+# 	$(CC) -c main.cpp $(CFLAGS)
+
+# imageloading.o: imageloading.cpp imageloading.h
+# 	$(CC) -c imageloading.cpp $(CFLAGS)
+
+# .PHONY: clean
 # clean:
-# 	del %TARGET%
-
+# 	del *.o main.exe
