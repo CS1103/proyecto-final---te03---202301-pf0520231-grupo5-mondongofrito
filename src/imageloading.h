@@ -17,12 +17,10 @@ namespace mondongo {
     void showImage(const cv::Mat &image, const string &windowName = "Press any key to close");
     void displayImageValues(const cv::Mat &image, bool round = false);
     void displayImageChars(const cv::Mat &image);
-    void flatten(const cv::Mat &img);
+    void flattenCV(const cv::Mat &img);
 }
 
 // http://neuralnetworksanddeeplearning.com/chap1.html
 // https://docs.opencv.org/4.7.0/d1/dfb/intro.html
 // https://stackoverflow.com/questions/1041554/bitwise-operators-and-endianness
 // https://stackoverflow.com/questions/8286668/how-to-read-mnist-data-in-c
-
-// ayuda aaaaaaaaaaa

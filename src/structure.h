@@ -23,6 +23,9 @@ namespace mondongo {
             hiddenNeurons = hiddenNeurons;
             hiddenLayer.reshape(hiddenNeurons);
         }
+        NeuralNetwork(string dataPath) {
+            
+        }
         void train(vector<pair<cv::Mat, int>> &dataset, int timesPerImage) {
         }
     };

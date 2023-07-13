@@ -23,4 +23,4 @@ El descenso de gradiente es un algoritmo de optimización utilizado para ajustar
 
 ## Requerimientos
 
-Para compilar o ejecutar el programa, se requiere la versión 4.7.0 de OpenCV o una más reciente. Se está considerando incluir una instalación local con el ejecutable, aunque aún no se decide. Se recomienda, aunque no es completamente necesario, utilizar los compiladores especificados la [guía de compilación](/COMPILINGSETUP.md).
+Para compilar o ejecutar el programa, se requiere la versión 4.7.0 de OpenCV o una más reciente. Se está considerando incluir una instalación local con el ejecutable, aunque aún no se decide. Se recomienda, aunque no es completamente necesario, utilizar los compiladores especificados en la [guía de compilación](/COMPILINGSETUP.md).
