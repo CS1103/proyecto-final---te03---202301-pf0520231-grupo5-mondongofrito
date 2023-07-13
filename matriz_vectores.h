@@ -82,6 +82,6 @@ public:
   }
 
 //falta el otro aparte de transpose cuma
-
+//hola
   ~Matrix(){};
 };
