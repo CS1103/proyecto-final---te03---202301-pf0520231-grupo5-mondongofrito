@@ -98,7 +98,7 @@ namespace mondongo {
             data.resize(rows, vector<T>(cols));
             data = other.data;
             return *this;
-        }
+        } 
 
         /// @brief Move assignment.
         /// @param other Matrix to transfer values from.
