@@ -8,7 +8,8 @@
 #include <random>
 #include <cmath>
 
-using namespace std;
+
+using namespace std;   
 
 namespace mondongo {
     class NeuralNetwork {
