@@ -17,7 +17,7 @@ namespace mondongo {
         cv::Mat hiddenWeights; // Weights for the connections between input and hidden layers
         cv::Mat outputWeights; // Weights for the connections between hidden and output layers
         double hiddenNeurons = 0; // Size of hidden layer
-        int inputSize; // Size of input layerS
+        int inputSize; // Size of input layer
         int outputSize; // Size of output layer
         
     private:
@@ -68,23 +68,28 @@ namespace mondongo {
             cv::Mat hiddenDelta = learningRate * input.t() * hiddenErrors;  // se calcula el delta de la capa oculta con la formula learningRate * input.t() * hiddenErrors
             hiddenWeights += hiddenDelta; // se actualizan los pesos de la capa oculta
         }
-        
     public:
     // NN
+        NeuralNetwork() = default;
         NeuralNetwork(int inputSize, int hiddenNeurons, int outputSize) { // se le pasa el tamaño de la capa de entrada, el tamaño de la capa oculta y el tamaño de la capa de salida
             this->inputSize = inputSize; // se asigna el tamaño de la capa de entrada
             this->hiddenNeurons = hiddenNeurons; // se asigna el tamaño de la capa oculta
             this->outputSize = outputSize; // se asigna el tamaño de la capa de salida
             
-            inputLayer = cv::Mat::zeros(inputSize, 1, CV_64FC1); // se crea una matriz de ceros con el tamaño de la capa de entrada la cual es de 784
-            hiddenLayer = cv::Mat::zeros(hiddenNeurons, 1,  ); // se crea una matriz de ceros con el tamaño de la capa oculta la cual es de 15
-            outputLayer = cv::Mat::zeros(outputSize, 1, CV_64FC1); // se crea una matriz de ceros con el tamaño de la capa de salida la cual es de 10
+            inputLayer = cv::Mat::zeros(inputSize, 1, CV_64F); // se crea una matriz de ceros con el tamaño de la capa de entrada la cual es de 784
+            hiddenLayer = cv::Mat::zeros(hiddenNeurons, 1, CV_64F); // se crea una matriz de ceros con el tamaño de la capa oculta la cual es de 15
+            outputLayer = cv::Mat::zeros(outputSize, 1, CV_64F); // se crea una matriz de ceros con el tamaño de la capa de salida la cual es de 10
             
-            hiddenWeights = cv::Mat::zeros(inputSize, hiddenNeurons, CV_64FC1); // se crea una matriz de ceros con el tamaño de la capa de entrada y la capa oculta
-            outputWeights = cv::Mat::zeros(hiddenNeurons, outputSize, CV_64FC1); // se crea una matriz de ceros con el tamaño de la capa oculta y la capa de salida
+            hiddenWeights = cv::Mat::zeros(inputSize, hiddenNeurons, CV_64F); // se crea una matriz de ceros con el tamaño de la capa de entrada y la capa oculta
+            outputWeights = cv::Mat::zeros(hiddenNeurons, outputSize, CV_64F); // se crea una matriz de ceros con el tamaño de la capa oculta y la capa de salida
             
             initializeWeights(); // se inicializan los pesos
         }
-        
+        NeuralNetwork(string dataPath) {};
+        ~NeuralNetwork(){};
+        void train(string &imagePath, string &labelPath) {
+            vector<pair<cv::Mat, int>> mnist;
+            loadMnist(imagePath, labelPath, ref(mnist));
+        }
     };
 };

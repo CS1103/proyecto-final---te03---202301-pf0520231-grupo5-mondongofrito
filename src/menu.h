@@ -9,6 +9,7 @@
 #include <tchar.h>
 #include <stdlib.h>
 #include <fstream>
+#include <filesystem>
 
 #include "imageloading.h"
 #include "structure.h"
@@ -18,6 +19,8 @@ using namespace std;
 namespace mondongo {
     const string MNIST_TRAINIMAGES = "../../mnist/train-images.idx3-ubyte";
     const string MNIST_TRAINLABELS = "../../mnist/train-labels.idx1-ubyte";
+    const string MNIST_TRAINIMAGES_EXTENSION = ".idx3-ubyte";
+    const string MNIST_TRAINLABELS_EXTENSION = ".idx1-ubyte";
     const string VERSION = "0.1a";
     const string USERCONFIRM = "YyNn";
     enum OPTION {
@@ -33,8 +36,10 @@ namespace mondongo {
     void clearLine();
     void showOptions();
     void createNeuralNetwork(unique_ptr<NeuralNetwork> &nn);
-    bool assertFileOpening(string &path);
+    bool assertNeuralNetworkDataOpening(string &path);
+    bool assertFileExtension(string path, string extension);
     string openFileExplorer();
     void loadNeuralNetwork(unique_ptr<NeuralNetwork> &nn);
+    void trainNeuralNetwork(unique_ptr<NeuralNetwork> &nn);
     void start();
 }

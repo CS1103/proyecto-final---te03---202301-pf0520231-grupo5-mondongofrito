@@ -68,19 +68,27 @@ void mondongo::createNeuralNetwork(unique_ptr<NeuralNetwork> &nn) {
         hiddenNeurons = input<int>("\nThe network must have more than 10 neurons:");
     }
     // delete old object in ptr and assign it a new one
-    nn.reset(new NeuralNetwork(hiddenNeurons));
+    nn.reset(new NeuralNetwork(28*28, hiddenNeurons, 10));
 }
-
 
 /// @brief Verifies the correct opening and reading of data files.
 /// @param path The path of the selected file.
 /// @return True if file was read and loaded correctly, false otherwise.
-bool mondongo::assertFileOpening(string &path) {
+bool mondongo::assertNeuralNetworkDataOpening(string &path) {
     auto file = ifstream(path);
     if(!file.is_open()) { return false;}
     string check; getline(file, check);
     if (check.substr(0, 15) != "/MondongoFrito/") { return false; }
     return true;
+}
+
+/// @brief Verifies the selected file is of the desired extension.
+/// @param path File path.
+/// @param extension Extension to be checked for.
+/// @return True if extension matches, false otherwise.
+bool mondongo::assertFileExtension(string path, string extension) {
+    filesystem::path filePath = path;
+    return filePath.extension() == extension;
 }
 
 /// @brief Opens the file explorer to look for a file.
@@ -110,8 +118,8 @@ string mondongo::openFileExplorer() {
     }
 }
 
-/// @brief Loads a neural network from a file
-/// @param nn Neural network pointer to load the network to
+/// @brief Loads a neural network from a file.
+/// @param nn Neural network pointer to load the network to.
 void mondongo::loadNeuralNetwork(unique_ptr<NeuralNetwork> &nn) {
     clearConsole();
     while (nn) {
@@ -124,13 +132,34 @@ void mondongo::loadNeuralNetwork(unique_ptr<NeuralNetwork> &nn) {
     }
     cout << "Please choose the .txt data file:\n";
     string dataPath = openFileExplorer();
-    if (dataPath == "cancel") { return; }
-    else if (!assertFileOpening(dataPath)) {
+    if (!assertNeuralNetworkDataOpening(dataPath)) {
         cout << "\nSelection is not a valid MondongoFrito file.\n" << endl;
         system("pause");
     }
     else {
         nn.reset(new NeuralNetwork(dataPath)); // TODO
+    }
+}
+
+/// @brief Calls the NN trainer.
+/// @param nn Pointer to the NN.
+void mondongo::trainNeuralNetwork(unique_ptr<NeuralNetwork> &nn) {
+    clearConsole();
+    while (!nn) { // If there's no nn yet
+        auto opt = input<string>("No neural network found. Would you like to create one? [Y/N]:");
+        while (USERCONFIRM.find(opt) == string::npos) {
+            opt = input<string>("\nNot a valid option. [Y/N]:");
+        }
+        if (opt == "Y" || opt == "y") { cout << endl; createNeuralNetwork(nn); break; }
+        else if (opt == "N" || opt == "n") { return; }
+    }
+    cout << "\nPlease select the MNIST image file:\n";
+    string imagePath = openFileExplorer();
+    cout << "\nPlease select the MNIST label file:\n";
+    string labelPath = openFileExplorer();
+
+    if (assertFileExtension(imagePath, MNIST_TRAINIMAGES_EXTENSION) && assertFileExtension(labelPath, MNIST_TRAINLABELS_EXTENSION)) {
+        nn->train(imagePath, labelPath);
     }
 }
 
@@ -149,11 +178,13 @@ void mondongo::start() {
             case QUIT: return;
             case CREATE: 
                 createNeuralNetwork(nn);
-                break; // Pide directorio del mnist y hace n bucles por imagen, luego guarda el archivo
+                break;
             case LOAD:
                 loadNeuralNetwork(nn); // Carga un txt con la info de la red, y la tiene lista
                 break;
-            case TRAIN: break; // usa la nn cargada para reconocer una imagen especificada por el usuario
+            case TRAIN:
+                trainNeuralNetwork(nn);
+                break;
         }
     }
 }
