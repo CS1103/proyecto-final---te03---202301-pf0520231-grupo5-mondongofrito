@@ -180,7 +180,8 @@ void mondongo::predictNeuralNetwork(unique_ptr<NeuralNetwork> &nn) {
     string dataPath = openFileExplorer();
     cv::Mat toPredict = loadImage(dataPath);
     normalizeImage(toPredict);
-    nn->predict(toPredict);
+    int a = nn->predict(toPredict);
+    cout << "Recognized number is " << a << endl;
     system("pause");
 }
 
