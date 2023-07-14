@@ -6,8 +6,8 @@
 #include <string>
 #include <memory>
 #include <windows.h>
-#include <tchar.h>
 #include <stdlib.h>
+#include <tchar.h>
 #include <fstream>
 #include <filesystem>
 
@@ -41,5 +41,6 @@ namespace mondongo {
     string openFileExplorer();
     void loadNeuralNetwork(unique_ptr<NeuralNetwork> &nn);
     void trainNeuralNetwork(unique_ptr<NeuralNetwork> &nn);
+    void predictNeuralNetwork(unique_ptr<NeuralNetwork> &nn);
     void start();
 }

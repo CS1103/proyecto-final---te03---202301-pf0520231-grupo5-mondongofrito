@@ -68,7 +68,7 @@ void mondongo::createNeuralNetwork(unique_ptr<NeuralNetwork> &nn) {
         hiddenNeurons = input<int>("\nThe network must have more than 10 neurons:");
     }
     // delete old object in ptr and assign it a new one
-    nn.reset(new NeuralNetwork(28*28, hiddenNeurons, 10));
+    nn.reset(new NeuralNetwork(hiddenNeurons));
 }
 
 /// @brief Verifies the correct opening and reading of data files.
@@ -137,7 +137,7 @@ void mondongo::loadNeuralNetwork(unique_ptr<NeuralNetwork> &nn) {
         system("pause");
     }
     else {
-        nn.reset(new NeuralNetwork(dataPath)); // TODO
+        //nn.reset(new NeuralNetwork(dataPath)); // TODO
     }
 }
 
@@ -151,7 +151,7 @@ void mondongo::trainNeuralNetwork(unique_ptr<NeuralNetwork> &nn) {
             opt = input<string>("\nNot a valid option. [Y/N]:");
         }
         if (opt == "Y" || opt == "y") { cout << endl; createNeuralNetwork(nn); break; }
-        else if (opt == "N" || opt == "n") { return; }
+        else if (!nn || opt == "N" || opt == "n") { return; }
     }
     cout << "\nPlease select the MNIST image file:\n";
     string imagePath = openFileExplorer();
@@ -159,9 +159,31 @@ void mondongo::trainNeuralNetwork(unique_ptr<NeuralNetwork> &nn) {
     string labelPath = openFileExplorer();
 
     if (assertFileExtension(imagePath, MNIST_TRAINIMAGES_EXTENSION) && assertFileExtension(labelPath, MNIST_TRAINLABELS_EXTENSION)) {
+        clearConsole();
         nn->train(imagePath, labelPath);
     }
 }
+
+/// @brief Recognizes the digit in an image.
+/// @param nn 
+void mondongo::predictNeuralNetwork(unique_ptr<NeuralNetwork> &nn) {
+    clearConsole();
+    while (!nn) { // If there's no nn yet
+        auto opt = input<string>("No neural network found. Would you like to create one? [Y/N]:");
+        while (USERCONFIRM.find(opt) == string::npos) {
+            opt = input<string>("\nNot a valid option. [Y/N]:");
+        }
+        if (opt == "Y" || opt == "y") { cout << endl; createNeuralNetwork(nn); break; }
+        else if (opt == "N" || opt == "n") { return; }
+    }
+    cout << "\nPlease select an image to recognize:\n";
+    string dataPath = openFileExplorer();
+    cv::Mat toPredict = loadImage(dataPath);
+    normalizeImage(toPredict);
+    nn->predict(toPredict);
+    system("pause");
+}
+
 
 /// @brief Main program loop.
 void mondongo::start() {
@@ -180,10 +202,13 @@ void mondongo::start() {
                 createNeuralNetwork(nn);
                 break;
             case LOAD:
-                loadNeuralNetwork(nn); // Carga un txt con la info de la red, y la tiene lista
+                loadNeuralNetwork(nn);
                 break;
             case TRAIN:
                 trainNeuralNetwork(nn);
+                break;
+            case GUESS:
+                predictNeuralNetwork(nn);
                 break;
         }
     }

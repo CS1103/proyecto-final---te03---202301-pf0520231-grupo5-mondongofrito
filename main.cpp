@@ -1,14 +1,13 @@
 #include "src/menu.h"
+#include <iostream>
+#include <vector>
 
 using namespace std;
+using namespace cv;
+using namespace mondongo;
 
 int main() {
     cv::utils::logging::setLogLevel(cv::utils::logging::LogLevel::LOG_LEVEL_SILENT);
-    mondongo::start();
-    /*vector<pair<cv::Mat, int>> images;
-    mondongo::loadMnist(mondongo::MNIST_TRAINIMAGES, mondongo::MNIST_TRAINLABELS, ref(images));
-    for (auto e : images) {
-        mondongo::showImage(e.first);
-    }*/
+    start();
     return 0;
 }
