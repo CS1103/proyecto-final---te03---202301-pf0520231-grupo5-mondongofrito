@@ -58,13 +58,13 @@ namespace mondongo {
         }
         
         // Backward propagation of errors
-        void backwardPropagation(const cv::Mat& input, const cv::Mat& target, double learningRate) // se le pasa la matriz de entrada, la matriz de salida y el learning rate
+        void backwardPropagation(const cv::Mat& input, const cv::Mat& target) // se le pasa la matriz de entrada, la matriz de salida y el learning rate
         {
             // Calculate errors in the output layer
             cv::Mat outputErrors = (target - outputLayer) * outputLayer.mul(1 - outputLayer); // se calcula el error de la capa de salida con la formula (target - outputLayer) * outputLayer * (1 - outputLayer)
             
             // Update weights and biases between hidden and output layers
-            cv::Mat outputDelta = learningRate * hiddenLayer.t() * outputErrors; // se calcula el delta de la capa de salida con la formula learningRate * hiddenLayer.t() * outputErrors
+            cv::Mat outputDelta = 0.1 * hiddenLayer.t() * outputErrors; // se calcula el delta de la capa de salida con la formula learningRate * hiddenLayer.t() * outputErrors
             outputWeights += outputDelta; // se actualizan los pesos de la capa de salida
             cv::reduce(outputDelta, outputBias, 0, cv::REDUCE_SUM);
             
@@ -72,7 +72,7 @@ namespace mondongo {
             cv::Mat hiddenErrors = outputErrors * outputWeights.t() * hiddenLayer.mul(1 - hiddenLayer); // se calcula el error de la capa oculta con la formula outputErrors * outputWeights.t() * hiddenLayer * (1 - hiddenLayer)
             
             // Update weights and biases between input and hidden layers
-            cv::Mat hiddenDelta = learningRate * input.t() * hiddenErrors;  // se calcula el delta de la capa oculta con la formula learningRate * input.t() * hiddenErrors
+            cv::Mat hiddenDelta = 0.1 * input.t() * hiddenErrors;  // se calcula el delta de la capa oculta con la formula learningRate * input.t() * hiddenErrors
             hiddenWeights += hiddenDelta; // se actualizan los pesos de la capa oculta
             cv::reduce(hiddenDelta, hiddenBias, 0, cv::REDUCE_SUM);
         }
@@ -93,9 +93,9 @@ namespace mondongo {
             initializeWeightsAndBiases(); // se inicializan los pesos y biases con números aleatorios
         }
 
-        void train(const cv::Mat& input, const cv::Mat& target, double learningRate) {
+        void train(const cv::Mat& input, const cv::Mat& target) {
             cv::Mat output = forwardPropagation(input);
-            backwardPropagation(input, target, learningRate);
+            backwardPropagation(input, target);
         }
 
         cv::Mat predict(const cv::Mat& input) {
