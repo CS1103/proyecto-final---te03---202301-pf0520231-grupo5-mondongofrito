@@ -24,6 +24,9 @@ namespace mondongo {
         int inputSize; // Size of input layer
         int outputSize; // Size of output layer
         
+
+    
+
     private:
     // Sigmoid function
         double sigmoid(double x) {
@@ -46,36 +49,52 @@ namespace mondongo {
         }
         
         cv::Mat forwardPropagation(const cv::Mat& input) {
+            
+            input.reshape(1, 1);
             // Calculate values of the hidden layer
             cv::Mat hiddenInput = input * hiddenWeights + hiddenBias; // se multiplica la matriz de entrada por la matriz de pesos y se suma el bias
             hiddenLayer = sigmoid(hiddenInput); // se aplica la funcion de activacion a la matriz resultante
-            
             // Calculate values of the output layer
             cv::Mat outputInput = hiddenLayer * outputWeights + outputBias; // se multiplica la matriz de entrada por la matriz de pesos y se suma el bias
             outputLayer = sigmoid(outputInput); // se aplica la funcion de activacion a la matriz resultante
-            
+
             return outputLayer;
         }
         
         // Backward propagation of errors
-        void backwardPropagation(const cv::Mat& input, const cv::Mat& target) // se le pasa la matriz de entrada, la matriz de salida y el learning rate
-        {
+        void backwardPropagation(const cv::Mat& input, const cv::Mat& target, double learningRate) {
+            
             // Calculate errors in the output layer
-            cv::Mat outputErrors = (target - outputLayer) * outputLayer.mul(1 - outputLayer); // se calcula el error de la capa de salida con la formula (target - outputLayer) * outputLayer * (1 - outputLayer)
+            cv::Mat outputErrors = (target.t() - outputLayer).mul(outputLayer.mul(1 - outputLayer));
+            
             
             // Update weights and biases between hidden and output layers
-            cv::Mat outputDelta = 0.1 * hiddenLayer.t() * outputErrors; // se calcula el delta de la capa de salida con la formula learningRate * hiddenLayer.t() * outputErrors
-            outputWeights += outputDelta; // se actualizan los pesos de la capa de salida
-            cv::reduce(outputDelta, outputBias, 0, cv::REDUCE_SUM);
+            cv::Mat outputDelta = learningRate * outputErrors.t() * hiddenLayer;
+            outputWeights += outputDelta.t();
+
+            cv::Mat outputBiasDelta;
+            cv::reduce(outputErrors, outputBiasDelta, 0, cv::REDUCE_SUM);
+            outputBias += outputBiasDelta;
+
             
             // Calculate errors in the hidden layer
-            cv::Mat hiddenErrors = outputErrors * outputWeights.t() * hiddenLayer.mul(1 - hiddenLayer); // se calcula el error de la capa oculta con la formula outputErrors * outputWeights.t() * hiddenLayer * (1 - hiddenLayer)
+            cv::Mat hiddenErrors = outputWeights * outputErrors.t();
+            hiddenErrors = hiddenErrors.t().mul(hiddenLayer.mul(1 - hiddenLayer));
+            
             
             // Update weights and biases between input and hidden layers
-            cv::Mat hiddenDelta = 0.1 * input.t() * hiddenErrors;  // se calcula el delta de la capa oculta con la formula learningRate * input.t() * hiddenErrors
-            hiddenWeights += hiddenDelta; // se actualizan los pesos de la capa oculta
-            cv::reduce(hiddenDelta, hiddenBias, 0, cv::REDUCE_SUM);
+            cv::Mat hiddenDelta = learningRate * hiddenErrors.t() * input;
+            hiddenWeights += hiddenDelta.t();
+
+            cv::Mat hiddenBiasDelta;
+            cv::reduce(hiddenErrors, hiddenBiasDelta, 0, cv::REDUCE_SUM);
+            hiddenBias += hiddenBiasDelta;
+
+            
         }
+
+
+
     public:
     // NN
         NeuralNetwork() = default;
@@ -93,9 +112,9 @@ namespace mondongo {
             initializeWeightsAndBiases(); // se inicializan los pesos y biases con números aleatorios
         }
 
-        void train(const cv::Mat& input, const cv::Mat& target) {
+        void train(const cv::Mat& input, const cv::Mat& target, double learningRate) {
             cv::Mat output = forwardPropagation(input);
-            backwardPropagation(input, target);
+            backwardPropagation(input, target, learningRate);
         }
 
         cv::Mat predict(const cv::Mat& input) {
